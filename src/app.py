@@ -2,6 +2,8 @@ from flask import Flask, render_template,redirect,request,session
 import json
 from web3 import Web3,HTTPProvider
 
+_companies=['TCS','Infosys','Tech Mahindra','HCL','Wipro']
+
 def connect_with_register_blockchain(acc):
     server='http://127.0.0.1:7545'
     web3=Web3(HTTPProvider(server))
@@ -75,7 +77,16 @@ def loginUser():
 
 @app.route('/dashboard')
 def dashboardPage():
-    return render_template('dashboard.html')
+    contract,web3=connect_with_trades_blockchain(0)
+    _usernames,_shares,_shareprices=contract.functions.viewShares().call()
+    data=[]
+    for i in range(len(_usernames)):
+        dummy=[]
+        dummy.append(_companies[i])
+        dummy.append(_shares[i])
+        dummy.append(_shareprices[i])
+        data.append(dummy)
+    return render_template('dashboard.html',dashboard_data=data,len=len(data))
 
 @app.route('/cdashboard')
 def cdashboardPage():
