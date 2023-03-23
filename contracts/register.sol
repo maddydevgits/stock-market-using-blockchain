@@ -35,4 +35,15 @@ contract register {
   function viewUsers() public view returns(address[] memory, uint[] memory, uint[] memory,uint[] memory){
     return(_usernames,_passwords,_roles,_amounts);
   }
+
+  function updateBalance(address user, uint bal) public {
+    uint i;
+
+    for(i=0;i<_usernames.length;i++) {
+      if(_usernames[i]==user){
+        _amounts[i]=bal;
+      }
+    }
+
+  }
 }
